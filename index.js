@@ -63,7 +63,15 @@ var rollupBuild = function (files, distPath) { return __awaiter(void 0, void 0, 
             case 0:
                 inputOptions = {
                     input: files.map(function (file) { return file.path; }),
-                    plugins: [rollup_plugin_svelte_1["default"]({ customElement: true }), plugin_node_resolve_1["default"](), plugin_json_1["default"](), plugin_image_1["default"]()]
+                    plugins: [
+                        rollup_plugin_svelte_1["default"]({
+                            preprocess: { markup: writeCustomElementTagIfMissing },
+                            customElement: true
+                        }),
+                        plugin_node_resolve_1["default"](),
+                        plugin_json_1["default"](),
+                        plugin_image_1["default"](),
+                    ]
                 };
                 return [4 /*yield*/, rollup.rollup(inputOptions)];
             case 1:
@@ -92,3 +100,17 @@ var rollupBuild = function (files, distPath) { return __awaiter(void 0, void 0, 
         }
     });
 }); };
+var CUSTOM_ELEMENT_PATTERN = /svelte:options.*tag="/;
+var FILENAME_PATTERN = /^\/?(.+\/)*(.+)\.(.+)$/;
+var NAME_CAPTURE_GROUP = 2;
+var writeCustomElementTagIfMissing = function (_a) {
+    var content = _a.content, filename = _a.filename;
+    var target = content;
+    if (!CUSTOM_ELEMENT_PATTERN.test(content)) {
+        var tagLabel = filename.match(FILENAME_PATTERN)[NAME_CAPTURE_GROUP];
+        target = target + "<svelte:options tag=\"custom-" + tagLabel.toLowerCase() + "\" />";
+    }
+    return {
+        code: target
+    };
+};
