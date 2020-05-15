@@ -42,6 +42,8 @@ exports.__esModule = true;
 var Vinyl_1 = __importDefault(require("Vinyl"));
 var rollup = require("rollup");
 var rollup_plugin_svelte_1 = __importDefault(require("rollup-plugin-svelte"));
+var plugin_json_1 = __importDefault(require("@rollup/plugin-json"));
+var plugin_image_1 = __importDefault(require("@rollup/plugin-image"));
 require("svelte");
 var plugin_node_resolve_1 = __importDefault(require("@rollup/plugin-node-resolve"));
 var path_1 = __importDefault(require("path"));
@@ -50,14 +52,18 @@ exports.compile = function (files, distPath) {
         resolve(rollupBuild(files, distPath));
     });
 };
+var Rollup;
+(function (Rollup) {
+    Rollup["CHUNK"] = "chunk";
+})(Rollup || (Rollup = {}));
 var rollupBuild = function (files, distPath) { return __awaiter(void 0, void 0, void 0, function () {
-    var inputOptions, bundle, outputOptions, output, compiledFile, _i, output_1, chunkOrAsset;
+    var inputOptions, bundle, outputOptions, output, compiledFiles, _i, output_1, chunkOrAsset;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 inputOptions = {
                     input: files.map(function (file) { return file.path; }),
-                    plugins: [rollup_plugin_svelte_1["default"]({ customElement: true }), plugin_node_resolve_1["default"]()]
+                    plugins: [rollup_plugin_svelte_1["default"]({ customElement: true }), plugin_node_resolve_1["default"](), plugin_json_1["default"](), plugin_image_1["default"]()]
                 };
                 return [4 /*yield*/, rollup.rollup(inputOptions)];
             case 1:
@@ -70,19 +76,19 @@ var rollupBuild = function (files, distPath) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, bundle.generate(outputOptions)];
             case 2:
                 output = (_a.sent()).output;
-                compiledFile = null;
+                compiledFiles = [];
                 for (_i = 0, output_1 = output; _i < output_1.length; _i++) {
                     chunkOrAsset = output_1[_i];
-                    if (chunkOrAsset.type === "chunk") {
-                        compiledFile = new Vinyl_1["default"]({
+                    if (chunkOrAsset.type === Rollup.CHUNK) {
+                        compiledFiles.push(new Vinyl_1["default"]({
                             contents: Buffer.alloc(chunkOrAsset.code.length, chunkOrAsset.code),
                             base: distPath,
                             path: path_1["default"].join(distPath, chunkOrAsset.fileName),
                             basename: chunkOrAsset.fileName
-                        });
+                        }));
                     }
                 }
-                return [2 /*return*/, [compiledFile]];
+                return [2 /*return*/, compiledFiles];
         }
     });
 }); };
