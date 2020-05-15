@@ -1,6 +1,6 @@
 {
   "name": "svelte-compiler",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "index.js",
   "dependencies": {
     "@babel/core": "^7.9.0",
