@@ -13,7 +13,7 @@
     "babel-preset-es2015": "^6.24.1",
     "rollup": "^2.3.2",
     "rollup-plugin-svelte": "^5.2.1",
-    "svelte": "^3.20.1",
+    "svelte": "^3.49.0",
     "typescript": "^3.8.3",
     "vinyl": "^2.2.0",
     "webpack": "^4.42.1",
@@ -23,7 +23,7 @@
     "@rollup/plugin-node-resolve": "^7.1.1"
   },
   "peerDependencies": {
-    "svelte": "^3.20.1"
+    "svelte": "^3.49.0"
   },
   "license": "SEE LICENSE IN LICENSE",
   "bit": {
